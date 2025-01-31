@@ -2,9 +2,17 @@ from PIL import Image, ImageSequence
 import numpy as np
 
 def binary_to_text(binary_str):
+    """Convert binary string to text, stopping at the delimiter."""
+    try:
+        delimiter_index = binary_str.find('1111111111111110') # Look for the full delimiter
+        if delimiter_index != -1:
+            binary_str = binary_str[:delimiter_index]  # Truncate at delimiter
+    except:
+        pass
+
     chars = [binary_str[i:i+8] for i in range(0, len(binary_str), 8)]
     text = ''.join(chr(int(char, 2)) for char in chars)
-    return text.split('þ')[0]  # Stop at delimiter
+    return text # No need to split anymore, the delimiter is what matters
 
 def decode_text_from_gif(encoded_gif):
     gif = Image.open(encoded_gif)
